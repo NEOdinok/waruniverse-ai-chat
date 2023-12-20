@@ -12,12 +12,11 @@ export default function Home() {
     inputRef.current?.focus();
   }, []);
 
-  //post processigng to remove .md file references gpt-3.5 sometimes includes in the answer
+  // post processigng to remove .md file references gpt-3.5 sometimes includes in the answer
   function removeMdFilenames(response: string): string {
-    const mdFilenameRegex = /\b\S+\.md\b/g;
+    const mdFilenameRegex = /(\s*\b\S+\.md\b\s*)/g;
     return response.replace(mdFilenameRegex, '');
   }
-
 
   async function handleSearch() {
     if (!query) {
@@ -50,7 +49,7 @@ export default function Home() {
 
       if (answer.text) {
         const cleanedResponse = removeMdFilenames(answer.text);
-        setAnswer(answer.text);
+        setAnswer(cleanedResponse);
       }
       setLoading(false);
     } catch (error) {
