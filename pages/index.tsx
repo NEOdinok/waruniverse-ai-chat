@@ -12,6 +12,13 @@ export default function Home() {
     inputRef.current?.focus();
   }, []);
 
+  //post processigng to remove .md file references gpt-3.5 sometimes includes in the answer
+  function removeMdFilenames(response: string): string {
+    const mdFilenameRegex = /\b\S+\.md\b/g;
+    return response.replace(mdFilenameRegex, '');
+  }
+
+
   async function handleSearch() {
     if (!query) {
       alert('Please input a question');
@@ -42,6 +49,7 @@ export default function Home() {
       const answer = await response.json();
 
       if (answer.text) {
+        const cleanedResponse = removeMdFilenames(answer.text);
         setAnswer(answer.text);
       }
       setLoading(false);
